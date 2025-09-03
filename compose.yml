@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:17.6-alpine
+    container_name: db_container
+    environment:
+      POSTGRES_USER: todo_py_api
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todo_py_api
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data-todo_py_api:/var/lib/postgresql/data
+
+volumes:
+  postgres_data-todo_py_api:
