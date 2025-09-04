@@ -27,6 +27,7 @@ SIMPLE_JWT = {
 }
 
 INSTALLED_APPS = [
+    'todo.apps.TodoConfig',
     'authentication.apps.AuthenticationConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
