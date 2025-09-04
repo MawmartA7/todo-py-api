@@ -19,6 +19,7 @@ REST_FRAMEWORK: Dict[str, Any] = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
 }
 
 SIMPLE_JWT = {
