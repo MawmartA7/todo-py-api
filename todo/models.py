@@ -13,4 +13,5 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        db_table = "tasks" 
+        db_table = "tasks"
+        ordering = ["-priority", "-created_at"]
