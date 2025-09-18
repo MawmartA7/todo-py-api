@@ -2,6 +2,7 @@ from datetime import timedelta
 from decouple import config # pyright: ignore[reportMissingTypeStubs]
 from typing import List, Dict, Any
 from pathlib import Path
+import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -66,18 +67,24 @@ TEMPLATES: List[Dict[str, Any]] = [
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
-
-DATABASES: Dict[str, Any] = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', '5432'),
-         
+if not 'test' in sys.argv:
+    DATABASES: Dict[str, Any] = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT', '5432'),
+        }
     }
-}
+else:
+    DATABASES: Dict[str, Any] = {    
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
