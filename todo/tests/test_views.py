@@ -19,13 +19,14 @@ class TaskListAPITest(APITestCase):
         self.outher_user_token = str(RefreshToken.for_user(self.outher_user).access_token)
         
         self.tasks = []
+        priorities = [2,1,3,2]
         
-        for task_id in range(3):
+        for task_id in range(4):
             task_created = Task.objects.create(
                 owner=self.user,
                 title=f"Task Test {task_id}",
                 description="Task test description",
-                priority=2
+                priority=priorities[task_id]
             )
             
             self.tasks.append( {
@@ -36,7 +37,9 @@ class TaskListAPITest(APITestCase):
                 "completed": task_created.completed,
                 "created_at": format_datetime_to_response_date(task_created.created_at)
             })
-            
+        
+        self.tasks.sort(key=lambda task: (task["priority"], task['created_at']), reverse=True)
+        
         self.url = reverse('list create tasks')
         
     def test_get_tasks_success(self):
