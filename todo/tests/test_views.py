@@ -2,12 +2,15 @@ from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 from ..utils.date_utils import format_datetime_to_response_date
 from datetime import datetime, timedelta, timezone
+import random
 
 from django.contrib.auth.models import User
 from ..models import Task
 
 from django.urls import reverse
 from rest_framework import status
+
+DEFAULT_PAGE_SIZE: int = 10
 
 class TaskListAPITest(APITestCase):
     
@@ -18,10 +21,13 @@ class TaskListAPITest(APITestCase):
         self.user_token = str(RefreshToken.for_user(self.user).access_token)
         self.outher_user_token = str(RefreshToken.for_user(self.outher_user).access_token)
         
-        self.tasks = []
-        priorities = [2,1,3,2]
+        self.tasks_length = 14
         
-        for task_id in range(4):
+        priorities = [random.randint(1, 3) for _ in range(self.tasks_length)]
+
+        self.tasks = []
+        
+        for task_id in range(self.tasks_length):
             task_created = Task.objects.create(
                 owner=self.user,
                 title=f"Task Test {task_id}",
@@ -44,17 +50,68 @@ class TaskListAPITest(APITestCase):
         
     def test_get_tasks_success(self):
         
+        expected = {
+            "count": len(self.tasks),
+            "results": self.tasks[:DEFAULT_PAGE_SIZE]
+        }
+        
         response = self.client.get(self.url, HTTP_AUTHORIZATION=f"Bearer {self.user_token}")
         
         self.assertTrue(response.status_code == status.HTTP_200_OK)
-        self.assertListEqual(response.json(), self.tasks)
+        self.assertTrue(response.json()["count"] == expected["count"])
+        self.assertListEqual(response.json()["results"], expected["results"])
+        
+    def test_get_tasks_page_two_success(self):
+    
+        page = 2
+    
+        expected = {
+            "count": len(self.tasks),
+            "results": self.tasks[DEFAULT_PAGE_SIZE:DEFAULT_PAGE_SIZE * page]
+        }
+        
+        response = self.client.get(self.url, data={"page":page}, HTTP_AUTHORIZATION=f"Bearer {self.user_token}")
+        
+        self.assertTrue(response.status_code == status.HTTP_200_OK)
+        self.assertTrue(response.json()["count"] == expected["count"])
+        self.assertListEqual(response.json()["results"], expected["results"])
+        
+    def test_get_tasks_page_size(self):
+    
+        page = 2
+    
+        new_page_size = 4
+    
+        expected = {
+            "count": len(self.tasks),
+            "results": self.tasks[new_page_size:new_page_size * 2]
+        }
+        
+        response = self.client.get(self.url, data={"page": page, "size": new_page_size}, HTTP_AUTHORIZATION=f"Bearer {self.user_token}")
+        
+        self.assertTrue(response.status_code == status.HTTP_200_OK)
+        self.assertTrue(response.json()["count"] == expected["count"])
+        self.assertListEqual(response.json()["results"], expected["results"])
+       
+    
+    def test_get_tasks_empty_page(self):
+        
+        expected = {
+            "detail": "Invalid page."
+        }
+        
+        response = self.client.get(self.url, data={"page":4}, HTTP_AUTHORIZATION=f"Bearer {self.user_token}")
+        
+        self.assertTrue(response.status_code == status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.json(), expected)
         
     def test_get_tasks_empty(self):
         
         response = self.client.get(self.url, HTTP_AUTHORIZATION=f"Bearer {self.outher_user_token}")
         
         self.assertTrue(response.status_code == status.HTTP_200_OK)
-        self.assertTrue(len(response.json()) == 0)
+        self.assertTrue(response.json()["count"] == 0)
+        self.assertTrue(len(response.json()["results"]) == 0)
     
     def test_get_tasks_unauthorized(self):
                 
