@@ -20,10 +20,10 @@ class TaskListAPITest(APITestCase):
         
         self.tasks = []
         
-        for task in range(3):
+        for task_id in range(3):
             task_created = Task.objects.create(
                 owner=self.user,
-                title=f"Task Test {task}",
+                title=f"Task Test {task_id}",
                 description="Task test description",
                 priority=2
             )

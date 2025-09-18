@@ -1,4 +1,4 @@
-from typing import cast, Any
+from typing import cast
 
 from django.test import TestCase
 from ..utils.date_utils import format_datetime_to_response_date
@@ -45,7 +45,7 @@ class TaskCreateSerializerUnitTest(TestCase):
         self.assertIn("title", serialize.errors)
 
     def test_deserialize_invalid_title_too_long(self):
-        invalid_data = {"title": "Title very long, Title very long, Title very long, Title very long, Title very long, Title very long!","description": "title too long"}
+        invalid_data = {"title": "a" * 101,"description": "title too long"}
         serialize = TaskCreateSerializer(data=invalid_data)
         self.assertFalse(serialize.is_valid())
         self.assertIn("title", serialize.errors)
@@ -112,10 +112,10 @@ class TaskListSerializerUnitTest(TestCase):
         self.tasks = []
         self.tasks_created = []
         
-        for task in range(3):
+        for task_id in range(3):
             task_created = Task.objects.create(
                 owner=self.user,
-                title=f"Task Test {task}",
+                title=f"Task Test {task_id}",
                 description="Task test description",
                 priority=2
             )
