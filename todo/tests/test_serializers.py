@@ -138,3 +138,8 @@ class TaskListSerializerUnitTest(TestCase):
         self.assertEqual(data[1]["description"], self.tasks[1]["description"])
         self.assertEqual(data[1]["priority"], self.tasks[1]["priority"])
         
+    def test_serialize_model_instance_with_empty_list(self):
+        serialize = TaskListSerializer([], many=True)
+        data = cast(list, serialize.data)
+        self.assertEqual(data, [])
+        
