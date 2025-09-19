@@ -11,3 +11,16 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data) -> User:
         user = User.objects.create_user(**validated_data)
         return user
+    
+    def update(self, instance, validated_data):
+        # Remove password of the update
+        password: str | None = validated_data.pop("password", None)
+        
+        updated_instance: User = super().update(instance, validated_data)
+
+        # Manual change password and save, to use the encription of django User model
+        if password:
+            updated_instance.set_password(password)
+            updated_instance.save()
+
+        return updated_instance
