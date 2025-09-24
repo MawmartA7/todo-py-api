@@ -40,7 +40,7 @@ class TaskListAPITest(APITestCase):
                 "title": task_created.title,
                 "description": task_created.description,
                 "priority": task_created.priority,
-                "completed": task_created.completed,
+                "is_done": task_created.is_done,
                 "created_at": format_datetime_to_response_date(task_created.created_at)
             })
         
@@ -185,7 +185,7 @@ class TaskRetriveUpdateDeleteAPITest(APITestCase):
                 "title": created_task.title,
                 "description": created_task.description,
                 "priority": created_task.priority,
-                "completed": created_task.completed,
+                "is_done": created_task.is_done,
                 "created_at": format_datetime_to_response_date(created_task.created_at),
                 "updated_at": format_datetime_to_response_date(created_task.updated_at)
             }

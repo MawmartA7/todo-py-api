@@ -9,7 +9,7 @@ class TaskListCreateApiView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['completed', 'priority']
+    filterset_fields = ['is_done', 'priority']
 
     def get_queryset(self): # type: ignore
         owner = self.request.user        
