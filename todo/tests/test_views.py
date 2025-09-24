@@ -23,7 +23,7 @@ class TaskListAPITest(APITestCase):
         
         self.tasks_length = 14
         
-        priorities = [random.randint(1, 3) for _ in range(self.tasks_length)]
+        priorities = [random.randint(1, 3) for _ in range(self.tasks_length - 3)] + [1,2,3]
 
         self.tasks = []
         
@@ -32,7 +32,8 @@ class TaskListAPITest(APITestCase):
                 owner=self.user,
                 title=f"Task Test {task_id}",
                 description="Task test description",
-                priority=priorities[task_id]
+                priority=priorities[task_id],
+                is_done=task_id % 2 == 0
             )
             
             self.tasks.append( {
@@ -92,7 +93,6 @@ class TaskListAPITest(APITestCase):
         self.assertTrue(response.status_code == status.HTTP_200_OK)
         self.assertTrue(response.json()["count"] == expected["count"])
         self.assertListEqual(response.json()["results"], expected["results"])
-       
     
     def test_get_tasks_empty_page(self):
         
@@ -104,7 +104,33 @@ class TaskListAPITest(APITestCase):
         
         self.assertTrue(response.status_code == status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.json(), expected)
+   
+    def test_get_tasks_filter_by_priority(self):
         
+        for priority in [1,2,3]:
+            response = self.client.get(self.url, data={"priority": priority}, HTTP_AUTHORIZATION=f"Bearer {self.user_token}")
+            
+            self.assertTrue(response.status_code == status.HTTP_200_OK)
+            self.assertTrue(all(task["priority"] == priority for task in response.json()["results"]))
+        
+    def test_get_tasks_filter_is_done(self):    
+            
+        for is_done in [True,False]:
+            response = self.client.get(self.url, data={"is_done": is_done}, HTTP_AUTHORIZATION=f"Bearer {self.user_token}")
+            
+            self.assertTrue(response.status_code == status.HTTP_200_OK)
+            self.assertTrue(all(task["is_done"] == is_done for task in response.json()["results"]))
+    
+    def test_get_tasks_filter_priority_and_is_done(self):
+        response = self.client.get(
+            self.url,
+            data={"priority": 2, "is_done": True},
+            HTTP_AUTHORIZATION=f"Bearer {self.user_token}"
+        )
+        self.assertTrue(response.status_code == status.HTTP_200_OK)
+        results = response.json()["results"]
+        self.assertTrue(all(task["priority"] == 2 and task["is_done"] is True for task in results))
+     
     def test_get_tasks_empty(self):
         
         response = self.client.get(self.url, HTTP_AUTHORIZATION=f"Bearer {self.outher_user_token}")
