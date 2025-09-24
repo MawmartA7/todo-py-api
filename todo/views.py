@@ -2,10 +2,14 @@ from .models import Task
 from .serializers import TaskListSerializer, TaskCreateSerializer, TaskDetailAndUpdateSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 
 class TaskListCreateApiView(generics.ListCreateAPIView):
     
     permission_classes = [IsAuthenticated]
+    
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['is_done', 'priority']
 
     def get_queryset(self): # type: ignore
         owner = self.request.user        
@@ -16,7 +20,6 @@ class TaskListCreateApiView(generics.ListCreateAPIView):
             return TaskCreateSerializer
         return TaskListSerializer
         
-    
     def perform_create(self, serializer: TaskCreateSerializer):
         if serializer.is_valid():
             serializer.save(owner=self.request.user)

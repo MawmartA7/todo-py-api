@@ -125,7 +125,7 @@ class TaskListSerializerUnitTest(TestCase):
                 "title": task_created.title,
                 "description": task_created.description,
                 "priority": task_created.priority,
-                "completed": task_created.completed,
+                "is_done": task_created.is_done,
                 "created_at": format_datetime_to_response_date(task_created.created_at)
             })
             

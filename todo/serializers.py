@@ -12,11 +12,11 @@ class TaskListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Task
-        fields = ["id", "title", "description", "priority", "completed", "created_at"]
+        fields = ["id", "title", "description", "priority", "is_done", "created_at"]
 
 class TaskDetailAndUpdateSerializer(serializers.ModelSerializer): 
     
     class Meta:
         model = Task
-        fields = ["id", "title", "description", "priority", "completed", "created_at", "updated_at"]
+        fields = ["id", "title", "description", "priority", "is_done", "created_at", "updated_at"]
         read_only_fields = ["id", "created_at", "updated_at"]
