@@ -22,6 +22,7 @@ REST_FRAMEWORK: Dict[str, Any] = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
@@ -32,6 +33,7 @@ SIMPLE_JWT = {
 INSTALLED_APPS = [
     'todo.apps.TodoConfig',
     'authentication.apps.AuthenticationConfig',
+    'drf_spectacular',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -102,6 +104,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Todo Py API',
+    'DESCRIPTION': 'A todo API in python using Django',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'persistAuthorization': True,
+        'displayOperationId': True,
+    },
+}
 
 LANGUAGE_CODE = 'en-us'
 
