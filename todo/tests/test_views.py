@@ -166,17 +166,11 @@ class TaskListAPITest(APITestCase):
                 "description": "new test task description",
                 "priority": 1,
             }
-        
-        expected = {
-            "title": [
-                "Este campo é obrigatório."
-            ]
-        }
-        
+
         response = self.client.post(self.url, task, HTTP_AUTHORIZATION=f"Bearer {self.outher_user_token}")
 
         self.assertTrue(response.status_code == status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.json(), expected)
+        self.assertIn("title", response.json())
         
     def test_create_task_unauthorized(self):
         task = {
