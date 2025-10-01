@@ -9,9 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("SECRET_KEY")
 
-DEBUG = config("DEBUG") == 1
+DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = [config("ALLOWED_HOST_1"),config("ALLOWED_HOST_2"),config("ALLOWED_HOST_3")]
+ALLOWED_HOSTS = [config("ALLOWED_HOST_1", default=""),config("ALLOWED_HOST_2", default=""),config("ALLOWED_HOST_3", default="127.0.0.1")]
 
 REST_FRAMEWORK: Dict[str, Any] = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
