@@ -501,6 +501,10 @@ python manage.py runserver
 python manage.py test 
 ```
 
+## Deployed URL 
+
+[Todo py API Deploy](https://todo-py-api.onrender.com)
+
 ---
 
 ## License
