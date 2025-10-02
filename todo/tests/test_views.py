@@ -122,11 +122,13 @@ class TaskListAPITest(APITestCase):
             self.assertTrue(all(task["is_done"] == is_done for task in response.json()["results"]))
     
     def test_get_tasks_filter_priority_and_is_done(self):
+        
         response = self.client.get(
             self.url,
             data={"priority": 2, "is_done": True},
             HTTP_AUTHORIZATION=f"Bearer {self.user_token}"
         )
+        
         self.assertTrue(response.status_code == status.HTTP_200_OK)
         results = response.json()["results"]
         self.assertTrue(all(task["priority"] == 2 and task["is_done"] is True for task in results))
@@ -172,7 +174,22 @@ class TaskListAPITest(APITestCase):
         self.assertTrue(response.status_code == status.HTTP_400_BAD_REQUEST)
         self.assertIn("title", response.json())
         
+    
+    def test_create_invalid_task_priority(self):
+        
+        task = {
+                "title": "new test task",
+                "description": "new test task description",
+                "priority": 4
+            }
+        
+        response = self.client.post(self.url, task, HTTP_AUTHORIZATION=f"Bearer {self.user_token}")
+        
+        self.assertTrue(response.status_code == status.HTTP_400_BAD_REQUEST)
+        self.assertIn("priority", response.json())
+        
     def test_create_task_unauthorized(self):
+        
         task = {
                 "title": "new test task",
                 "description": "new test task description",
@@ -268,6 +285,18 @@ class TaskRetriveUpdateDeleteAPITest(APITestCase):
         self.assertTrue(response.status_code == status.HTTP_200_OK)
         self.assertEqual(response.json(), self.task)
         self.assertTrue(abs((datetime.fromisoformat(updated_at)) - almost_updated_at) < timedelta(seconds=2))
+
+    def test_update_invalid_task_priority(self):
+        
+        task = {
+                "title": "new test task",
+                "priority": 4
+            }
+        
+        response = self.client.patch(self.url, task, HTTP_AUTHORIZATION=f"Bearer {self.user_token}")
+        
+        self.assertTrue(response.status_code == status.HTTP_400_BAD_REQUEST)
+        self.assertIn("priority", response.json())
     
     def test_update_task_not_found(self):
         
