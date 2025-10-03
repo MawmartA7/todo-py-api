@@ -17,6 +17,7 @@ Uma API RESTful simples feita com Django para gerenciamento de tarefas pessoais,
 
 - Sistema de usuários e autenticação JWT
 - CRUD de tarefas (Criar, Ler, Atualizar, Deletar)
+- As tarefas são privadas e acessíveis apenas pelo usuário que as criou.
 - Paginação e filtros para lista de tarefas
 - Validação de campo com erros detalhados
 
