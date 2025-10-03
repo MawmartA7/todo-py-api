@@ -6,17 +6,18 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13%2B-blue.svg)](https://www.postgresql.org/)
 [![Licença: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[Translation to en-US](README.md)
+[Translation to en](README.md)
 
 Uma API RESTful simples feita com Django para gerenciamento de tarefas pessoais, com autenticação JWT.
 
 ---
 
 
-## Features
+## Principais funcionalidades
 
-- Sistema de usuários e authenticação JWT
+- Sistema de usuários e autenticação JWT
 - CRUD de tarefas (Criar, Ler, Atualizar, Deletar)
+- As tarefas são privadas e acessíveis apenas pelo usuário que as criou.
 - Paginação e filtros para lista de tarefas
 - Validação de campo com erros detalhados
 
@@ -282,7 +283,7 @@ Status: `400 Bad Request`
 
 ---
 
-### List & Create Tasks
+### Listar & Criar Tarefas
 
 - **GET** `/api/tasks/`
 - **POST** `/api/tasks/`
@@ -367,7 +368,7 @@ Status: `401 Unauthorized`
 
 ---
 
-### Retrieve, Update & Delete Task
+### Recuperar, Atualizar & Deletar Task
 
 - **GET `/api/tasks/{id}/`**
 - **PATCH `/api/tasks/{id}/`**
@@ -375,7 +376,7 @@ Status: `401 Unauthorized`
 
 **Authorization:** Bearer <access_token>
 
-#### Retrieve
+#### Recuperar
 
 **Resposta de sucesso**
 
@@ -410,7 +411,7 @@ Status: `401 Unauthorized`
 }
 ```
 
-#### Update
+#### Atualizar
 
 **Requisição:**
 ```json
@@ -453,7 +454,7 @@ Status: `401 Unauthorized`
 }
 ```
 
-#### Delete
+#### Deletar
 
 **Resposta de sucesso**
 
@@ -485,25 +486,25 @@ Status: `401 Unauthorized`
 - Django & Django REST Framework
 - PostgreSQL (produção)
 
-## Run
+## Rodar API
 
 ```bash
 python manage.py migrate
 python manage.py runserver
 ```
 
-## Test
+## Testar
 
 ```bash
 python manage.py test 
 ```
 
-## Deployed URL 
+## URL publico
 
 [Todo py API Deploy](https://todo-py-api.onrender.com)
 
 ---
 
-## License
+## Licença
 
-MIT – veja [LICENSE](LICENSE)
+MIT – veja [LICENÇA](LICENSE)

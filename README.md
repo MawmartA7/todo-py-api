@@ -16,6 +16,7 @@ A simple Django RESTful API for managing personal tasks, with JWT authentication
 
 - User registration & JWT authentication
 - CRUD for tasks (Create, Read, Update, Delete)
+- Tasks are private and can only be accessed by the user who created them.
 - Pagination & filtering for task list
 - Field validation with detailed error messages
 
